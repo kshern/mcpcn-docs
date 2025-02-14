@@ -1,6 +1,6 @@
 ---
-title: 'Images and Embeds'
-description: 'Add image, video, and other HTML elements'
+title: '图片和嵌入内容'
+description: '添加图片、视频和其他HTML元素'
 icon: 'image'
 ---
 
@@ -9,33 +9,33 @@ icon: 'image'
   src="https://mintlify-assets.b-cdn.net/bigbend.jpg"
 />
 
-## Image
+## 图片
 
-### Using Markdown
+### 使用Markdown
 
-The [markdown syntax](https://www.markdownguide.org/basic-syntax/#images) lets you add images using the following code
+使用[markdown语法](https://www.markdownguide.org/basic-syntax/#images)可以通过以下代码添加图片
 
 ```md
-![title](/path/image.jpg)
+![标题](/path/image.jpg)
 ```
 
-Note that the image file size must be less than 5MB. Otherwise, we recommend hosting on a service like [Cloudinary](https://cloudinary.com/) or [S3](https://aws.amazon.com/s3/). You can then use that URL and embed.
+请注意，图片文件大小必须小于5MB。否则，我们建议将图片托管在[Cloudinary](https://cloudinary.com/)或[S3](https://aws.amazon.com/s3/)等服务上。然后您可以使用该URL进行嵌入。
 
-### Using Embeds
+### 使用嵌入
 
-To get more customizability with images, you can also use [embeds](/writing-content/embed) to add images
+要获得更多的图片自定义选项，您也可以使用[嵌入](/writing-content/embed)来添加图片
 
 ```html
 <img height="200" src="/path/image.jpg" />
 ```
 
-## Embeds and HTML elements
+## 嵌入内容和HTML元素
 
 <iframe
   width="560"
   height="315"
   src="https://www.youtube.com/embed/4KzFe50RQkQ"
-  title="YouTube video player"
+  title="YouTube视频播放器"
   frameBorder="0"
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
   allowFullScreen
@@ -46,13 +46,13 @@ To get more customizability with images, you can also use [embeds](/writing-cont
 
 <Tip>
 
-Mintlify supports [HTML tags in Markdown](https://www.markdownguide.org/basic-syntax/#html). This is helpful if you prefer HTML tags to Markdown syntax, and lets you create documentation with infinite flexibility.
+Mintlify支持[Markdown中的HTML标签](https://www.markdownguide.org/basic-syntax/#html)。如果您更喜欢HTML标签而不是Markdown语法，这将很有帮助，并且让您能够创建具有无限灵活性的文档。
 
 </Tip>
 
-### iFrames
+### iframe框架
 
-Loads another HTML page within the document. Most commonly used for embedding videos.
+在文档中加载另一个HTML页面。最常用于嵌入视频。
 
 ```html
 <iframe src="https://www.youtube.com/embed/4KzFe50RQkQ"> </iframe>

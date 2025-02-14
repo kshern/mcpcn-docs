@@ -1,15 +1,15 @@
 ---
-title: Inspector
-description: In-depth guide to using the MCP Inspector for testing and debugging Model Context Protocol servers
+title: 检查器
+description: 使用MCP检查器测试和调试模型上下文协议服务器的深入指南
 ---
 
-The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is an interactive developer tool for testing and debugging MCP servers. While the [Debugging Guide](/docs/tools/debugging) covers the Inspector as part of the overall debugging toolkit, this document provides a detailed exploration of the Inspector's features and capabilities.
+[MCP检查器](https://github.com/modelcontextprotocol/inspector)是一个用于测试和调试MCP服务器的交互式开发者工具。虽然[调试指南](/docs/tools/debugging)将检查器作为整体调试工具包的一部分进行介绍，但本文档提供了对检查器功能和能力的详细探讨。
 
-## Getting started
+## 入门
 
-### Installation and basic usage
+### 安装和基本用法
 
-The Inspector runs directly through `npx` without requiring installation:
+检查器可以直接通过`npx`运行，无需安装：
 
 
 ```bash
@@ -20,33 +20,32 @@ npx @modelcontextprotocol/inspector <command>
 npx @modelcontextprotocol/inspector <command> <arg1> <arg2>
 ```
 
-#### Inspecting servers from NPM or PyPi
+#### 检查来自NPM或PyPi的服务器
 
-A common way to start server packages from [NPM](https://npmjs.com) or [PyPi](https://pypi.com).
+从[NPM](https://npmjs.com)或[PyPi](https://pypi.com)启动服务器包的常用方法。
 
 <Tabs>
 
-  <Tab title="NPM package">
+  <Tab title="NPM包">
   ```bash
   npx -y @modelcontextprotocol/inspector npx <package-name> <args>
-  # For example
+  # 例如
   npx -y @modelcontextprotocol/inspector npx server-postgres postgres://127.0.0.1/testdb
   ```
   </Tab>
 
-  <Tab title="PyPi package">
+  <Tab title="PyPi包">
   ```bash
   npx @modelcontextprotocol/inspector uvx <package-name> <args>
-  # For example
+  # 例如
   npx @modelcontextprotocol/inspector uvx mcp-server-git --repository ~/code/mcp/servers.git
   ```
   </Tab>
 </Tabs>
 
-#### Inspecting locally developed servers
+#### 检查本地开发的服务器
 
-To inspect servers locally developed or downloaded as a repository, the most common
-way is:
+要检查本地开发或作为仓库下载的服务器，最常用的方法是：
 
 <Tabs>
   <Tab title="TypeScript">
@@ -66,80 +65,80 @@ way is:
   </Tab>
 </Tabs>
 
-Please carefully read any attached README for the most accurate instructions.
+请仔细阅读任何附带的README以获取最准确的说明。
 
-## Feature overview
+## 功能概述
 
-<Frame caption="The MCP Inspector interface">
+<Frame caption="MCP检查器界面">
   <img src="/images/mcp-inspector.png" />
 </Frame>
 
-The Inspector provides several features for interacting with your MCP server:
+检查器提供了几个用于与MCP服务器交互的功能：
 
-### Server connection pane
-- Allows selecting the [transport](/docs/concepts/transports) for connecting to the server
-- For local servers, supports customizing the command-line arguments and environment
+### 服务器连接面板
+- 允许选择用于连接服务器的[传输](/docs/concepts/transports)
+- 对于本地服务器，支持自定义命令行参数和环境
 
-### Resources tab
-- Lists all available resources
-- Shows resource metadata (MIME types, descriptions)
-- Allows resource content inspection
-- Supports subscription testing
+### 资源标签页
+- 列出所有可用资源
+- 显示资源元数据（MIME类型、描述）
+- 允许资源内容检查
+- 支持订阅测试
 
-### Prompts tab
-- Displays available prompt templates
-- Shows prompt arguments and descriptions
-- Enables prompt testing with custom arguments
-- Previews generated messages
+### 提示标签页
+- 显示可用的提示模板
+- 显示提示参数和描述
+- 启用带有自定义参数的提示测试
+- 预览生成的消息
 
-### Tools tab
-- Lists available tools
-- Shows tool schemas and descriptions
-- Enables tool testing with custom inputs
-- Displays tool execution results
+### 工具标签页
+- 列出可用工具
+- 显示工具模式和描述
+- 启用带有自定义输入的工具测试
+- 显示工具执行结果
 
-### Notifications pane
-- Presents all logs recorded from the server
-- Shows notifications received from the server
+### 通知面板
+- 展示从服务器记录的所有日志
+- 显示从服务器接收的通知
 
-## Best practices
+## 最佳实践
 
-### Development workflow
+### 开发工作流程
 
-1. Start Development
-   - Launch Inspector with your server
-   - Verify basic connectivity
-   - Check capability negotiation
+1. 开始开发
+   - 启动检查器和您的服务器
+   - 验证基本连接
+   - 检查能力协商
 
-2. Iterative testing
-   - Make server changes
-   - Rebuild the server
-   - Reconnect the Inspector
-   - Test affected features
-   - Monitor messages
+2. 迭代测试
+   - 进行服务器更改
+   - 重新构建服务器
+   - 重新连接检查器
+   - 测试受影响的功能
+   - 监控消息
 
-3. Test edge cases
-   - Invalid inputs
-   - Missing prompt arguments
-   - Concurrent operations
-   - Verify error handling and error responses
+3. 测试边缘情况
+   - 无效输入
+   - 缺少提示参数
+   - 并发操作
+   - 验证错误处理和错误响应
 
-## Next steps
+## 后续步骤
 
 <CardGroup cols={2}>
     <Card
-        title="Inspector Repository"
+        title="检查器仓库"
         icon="github"
         href="https://github.com/modelcontextprotocol/inspector"
     >
-        Check out the MCP Inspector source code
+        查看MCP检查器源代码
     </Card>
 
     <Card
-        title="Debugging Guide"
+        title="调试指南"
         icon="bug"
         href="/docs/tools/debugging"
     >
-        Learn about broader debugging strategies
+        了解更广泛的调试策略
     </Card>
 </CardGroup>

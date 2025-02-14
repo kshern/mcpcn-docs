@@ -1,15 +1,15 @@
 ---
-title: "For Server Developers"
-description: "Get started building your own server to use in Claude for Desktop and other clients."
+title: "面向服务开发者"
+description: "开始构建您自己的服务，以在Claude桌面版和其他客户端中使用。"
 ---
 
-In this tutorial, we'll build a simple MCP weather server and connect it to a host, Claude for Desktop. We'll start with a basic setup, and then progress to more complex use cases.
+在本教程中，我们将构建一个简单的MCP天气服务并将其连接到主机（Claude桌面版）。我们将从基础设置开始，然后逐步过渡到更复杂的用例。
 
-### What we'll be building
+### 我们要构建什么
 
-Many LLMs (including Claude) do not currently have the ability to fetch the forecast and severe weather alerts. Let's use MCP to solve that!
+许多大语言模型（包括Claude）目前还没有获取天气预报和严重天气预警的能力。让我们用MCP来解决这个问题！
 
-We'll build a server that exposes two tools: `get-alerts` and `get-forecast`. Then we'll connect the server to an MCP host (in this case, Claude for Desktop):
+我们将构建一个提供两个工具的服务：`get-alerts`和`get-forecast`。然后我们将把服务连接到MCP主机（在本例中是Claude桌面版）：
 
 <Frame>
   <img src="/images/weather-alerts.png" />
@@ -19,42 +19,42 @@ We'll build a server that exposes two tools: `get-alerts` and `get-forecast`. Th
 </Frame>
 
 <Note>
-Servers can connect to any client. We've chosen Claude for Desktop here for simplicity, but we also have guides on [building your own client](/quickstart/client) as well as a [list of other clients here](/clients).
+服务可以连接到任何客户端。我们在这里选择Claude桌面版是为了简单起见，我们还提供了[构建自己的客户端](/quickstart/client)的指南以及[其他客户端列表](/clients)。
 </Note>
 
-<Accordion title="Why Claude for Desktop and not Claude.ai?">
-  Because servers are locally run, MCP currently only supports desktop hosts. Remote hosts are in active development.
+<Accordion title="为什么选择Claude桌面版而不是Claude.ai？">
+  由于服务是在本地运行的，MCP目前只支持桌面主机。远程主机正在积极开发中。
 </Accordion>
 
-### Core MCP Concepts
+### MCP核心概念
 
-MCP servers can provide three main types of capabilities:
+MCP服务可以提供三种主要类型的功能：
 
-1. **Resources**: File-like data that can be read by clients (like API responses or file contents)
-2. **Tools**: Functions that can be called by the LLM (with user approval)
-3. **Prompts**: Pre-written templates that help users accomplish specific tasks
+1. **资源**：可被客户端读取的类文件数据（如API响应或文件内容）
+2. **工具**：可被大语言模型调用的函数（需要用户批准）
+3. **提示**：帮助用户完成特定任务的预写模板
 
-This tutorial will primarily focus on tools.
+本教程将主要关注工具。
 
 <Tabs>
 <Tab title='Python'>
 
-Let's get started with building our weather server! [You can find the complete code for what we'll be building here.](https://github.com/modelcontextprotocol/quickstart-resources/tree/main/weather-server-python)
+让我们开始构建我们的天气服务！[您可以在这里找到我们将要构建的完整代码。](https://github.com/modelcontextprotocol/quickstart-resources/tree/main/weather-server-python)
 
-### Prerequisite knowledge
+### 预备知识
 
-This quickstart assumes you have familiarity with:
+本快速入门假设您熟悉：
 - Python
-- LLMs like Claude
+- 像Claude这样的大语言模型
 
-### System requirements
+### 系统要求
 
-- Python 3.10 or higher installed.
-- You must use the Python MCP SDK 1.2.0 or higher.
+- 已安装Python 3.10或更高版本
+- 必须使用Python MCP SDK 1.2.0或更高版本
 
-### Set up your environment
+### 设置环境
 
-First, let's install `uv` and set up our Python project and environment:
+首先，让我们安装`uv`并设置我们的Python项目和环境：
 
 <CodeGroup>
 
@@ -68,73 +68,71 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 
 </CodeGroup>
 
-Make sure to restart your terminal afterwards to ensure that the `uv` command gets picked up.
+确保在安装后重新启动终端，以确保`uv`命令被正确识别。
 
-Now, let's create and set up our project:
+现在，让我们创建和设置我们的项目：
 
 <CodeGroup>
 ```bash MacOS/Linux
-# Create a new directory for our project
+# 创建一个新的目录用于我们的项目
 uv init weather
 cd weather
 
-# Create virtual environment and activate it
+# 创建虚拟环境并激活它
 uv venv
 source .venv/bin/activate
 
-# Install dependencies
+# 安装依赖项
 uv add "mcp[cli]" httpx
 
-# Create our server file
+# 创建我们的服务文件
 touch weather.py
 ```
 
 ```powershell Windows
-# Create a new directory for our project
+# 创建一个新的目录用于我们的项目
 uv init weather
 cd weather
 
-# Create virtual environment and activate it
+# 创建虚拟环境并激活它
 uv venv
 .venv\Scripts\activate
 
-# Install dependencies
+# 安装依赖项
 uv add mcp[cli] httpx
 
-# Create our server file
+# 创建我们的服务文件
 new-item weather.py
 ```
 </CodeGroup>
 
-Now let's dive into building your server.
+现在让我们开始构建我们的服务。
 
-## Building your server
+## 构建我们的服务
 
-### Importing packages and setting up the instance
+### 导入包和设置实例
 
-Add these to the top of your `weather.py`:
+在`weather.py`文件顶部添加以下代码：
 ```python
 from typing import Any
 import httpx
 from mcp.server.fastmcp import FastMCP
 
-# Initialize FastMCP server
+# 初始化FastMCP服务
 mcp = FastMCP("weather")
 
-# Constants
+# 常量
 NWS_API_BASE = "https://api.weather.gov"
 USER_AGENT = "weather-app/1.0"
 ```
 
-The FastMCP class uses Python type hints and docstrings to automatically generate tool definitions, making it easy to create and maintain MCP tools.
+### 辅助函数
 
-### Helper functions
-
-Next, let's add our helper functions for querying and formatting the data from the National Weather Service API:
+接下来，让我们添加用于从国家气象局API查询和格式化数据的辅助函数：
 
 ```python
 async def make_nws_request(url: str) -> dict[str, Any] | None:
-    """Make a request to the NWS API with proper error handling."""
+    """向NWS API发送请求，并进行错误处理。"""
     headers = {
         "User-Agent": USER_AGENT,
         "Accept": "application/geo+json"
@@ -148,104 +146,103 @@ async def make_nws_request(url: str) -> dict[str, Any] | None:
             return None
 
 def format_alert(feature: dict) -> str:
-    """Format an alert feature into a readable string."""
+    """格式化警报数据。"""
     props = feature["properties"]
     return f"""
-Event: {props.get('event', 'Unknown')}
-Area: {props.get('areaDesc', 'Unknown')}
-Severity: {props.get('severity', 'Unknown')}
-Description: {props.get('description', 'No description available')}
-Instructions: {props.get('instruction', 'No specific instructions provided')}
+事件：{props.get('event', '未知')}
+区域：{props.get('areaDesc', '未知')}
+严重程度：{props.get('severity', '未知')}
+描述：{props.get('description', '无描述')}
+指示：{props.get('instruction', '无指示')}
 """
 ```
 
-### Implementing tool execution
+### 实现工具执行
 
-The tool execution handler is responsible for actually executing the logic of each tool. Let's add it:
+工具执行处理器负责实际执行每个工具的逻辑。让我们添加它：
 
 ```python
 @mcp.tool()
 async def get_alerts(state: str) -> str:
-    """Get weather alerts for a US state.
+    """获取某个州的天气警报。
 
-    Args:
-        state: Two-letter US state code (e.g. CA, NY)
+    参数：
+        state：两个字母的美国州代码（例如CA，NY）
     """
     url = f"{NWS_API_BASE}/alerts/active/area/{state}"
     data = await make_nws_request(url)
 
     if not data or "features" not in data:
-        return "Unable to fetch alerts or no alerts found."
+        return "无法获取警报数据或没有警报。"
 
     if not data["features"]:
-        return "No active alerts for this state."
+        return "该州没有活跃的警报。"
 
     alerts = [format_alert(feature) for feature in data["features"]]
     return "\n---\n".join(alerts)
 
 @mcp.tool()
 async def get_forecast(latitude: float, longitude: float) -> str:
-    """Get weather forecast for a location.
+    """获取某个位置的天气预报。
 
-    Args:
-        latitude: Latitude of the location
-        longitude: Longitude of the location
+    参数：
+        latitude：位置的纬度
+        longitude：位置的经度
     """
-    # First get the forecast grid endpoint
+    # 首先获取预报网格端点
     points_url = f"{NWS_API_BASE}/points/{latitude},{longitude}"
     points_data = await make_nws_request(points_url)
 
     if not points_data:
-        return "Unable to fetch forecast data for this location."
+        return "无法获取预报数据。"
 
-    # Get the forecast URL from the points response
+    # 从点响应中获取预报URL
     forecast_url = points_data["properties"]["forecast"]
     forecast_data = await make_nws_request(forecast_url)
 
     if not forecast_data:
-        return "Unable to fetch detailed forecast."
+        return "无法获取详细预报。"
 
-    # Format the periods into a readable forecast
+    # 格式化预报周期
     periods = forecast_data["properties"]["periods"]
     forecasts = []
-    for period in periods[:5]:  # Only show next 5 periods
+    for period in periods[:5]:  # 只显示接下来的5个周期
         forecast = f"""
-{period['name']}:
-Temperature: {period['temperature']}°{period['temperatureUnit']}
-Wind: {period['windSpeed']} {period['windDirection']}
-Forecast: {period['detailedForecast']}
+{period['name']}：
+温度：{period['temperature']}°{period['temperatureUnit']}
+风速：{period['windSpeed']} {period['windDirection']}
+预报：{period['detailedForecast']}
 """
         forecasts.append(forecast)
 
     return "\n---\n".join(forecasts)
 ```
 
-### Running the server
+### 运行服务
 
-Finally, let's initialize and run the server:
+最后，让我们初始化并运行服务：
 
 ```python
 if __name__ == "__main__":
-    # Initialize and run the server
+    # 初始化和运行服务
     mcp.run(transport='stdio')
 ```
 
-Your server is complete! Run `uv run weather.py` to confirm that everything's working.
+您的服务已经完成！运行`uv run weather.py`来确认一切正常。
 
-Let's now test your server from an existing MCP host, Claude for Desktop.
+现在，让我们使用现有的MCP主机（Claude桌面版）测试我们的服务。
 
-## Testing your server with Claude for Desktop
+## 使用Claude桌面版测试我们的服务
 
 <Note>
-Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
+Claude桌面版尚未在Linux上提供。Linux用户可以继续[构建客户端](/quickstart/client)教程，构建一个可以连接到我们刚刚构建的服务的MCP客户端。
 </Note>
 
-First, make sure you have Claude for Desktop installed. [You can install the latest version
-here.](https://claude.ai/download) If you already have Claude for Desktop, **make sure it's updated to the latest version.**
+首先，确保您已经安装了Claude桌面版。如果您已经安装了Claude桌面版，请确保它是最新版本。
 
-We'll need to configure Claude for Desktop for whichever MCP servers you want to use. To do this, open your Claude for Desktop App configuration at `~/Library/Application Support/Claude/claude_desktop_config.json` in a text editor. Make sure to create the file if it doesn't exist.
+我们需要配置Claude桌面版，以便它可以连接到我们想要使用的MCP服务。为此，请打开您的Claude桌面版应用配置文件`~/Library/Application Support/Claude/claude_desktop_config.json`，在文本编辑器中打开它。如果文件不存在，请创建它。
 
-For example, if you have [VS Code](https://code.visualstudio.com/) installed:
+例如，如果您安装了[VS Code](https://code.visualstudio.com/)：
 
 <Tabs>
 <Tab title="MacOS/Linux">
@@ -260,9 +257,7 @@ code $env:AppData\Claude\claude_desktop_config.json
 </Tab>
 </Tabs>
 
-You'll then add your servers in the `mcpServers` key. The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
-
-In this case, we'll add our single weather server like so:
+您将在`mcpServers`键中添加我们的服务。在本例中，我们将添加我们的单个天气服务，如下所示：
 
 <Tabs>
 <Tab title="MacOS/Linux">
@@ -301,83 +296,75 @@ In this case, we'll add our single weather server like so:
 </Tab>
 </Tabs>
 
-<Warning>
-You may need to put the full path to the `uv` executable in the `command` field. You can get this by running `which uv` on MacOS/Linux or `where uv` on Windows.
-</Warning>
+这告诉Claude桌面版：
+1. 有一个名为“weather”的MCP服务
+2. 通过运行`uv --directory /ABSOLUTE/PATH/TO/PARENT/FOLDER/weather run weather.py`来启动它
 
-<Note>
-Make sure you pass in the absolute path to your server.
-</Note>
-
-This tells Claude for Desktop:
-1. There's an MCP server named "weather"
-2. To launch it by running `uv --directory /ABSOLUTE/PATH/TO/PARENT/FOLDER/weather run weather`
-
-Save the file, and restart **Claude for Desktop**.
+保存文件，并重新启动**Claude桌面版**。
 </Tab>
 
 <Tab title="Node">
-Let's get started with building our weather server! [You can find the complete code for what we'll be building here.](https://github.com/modelcontextprotocol/quickstart-resources/tree/main/weather-server-typescript)
+让我们开始构建我们的天气服务！[您可以在这里找到我们将要构建的完整代码。](https://github.com/modelcontextprotocol/quickstart-resources/tree/main/weather-server-typescript)
 
-### Prerequisite knowledge
+### 预备知识
 
-This quickstart assumes you have familiarity with:
+本快速入门假设您熟悉：
 - TypeScript
-- LLMs like Claude
+- 像Claude这样的大语言模型
 
-### System requirements
+### 系统要求
 
-For TypeScript, make sure you have the latest version of Node installed.
+对于TypeScript，确保您安装了最新版本的Node.js。
 
-### Set up your environment
+### 设置环境
 
-First, let's install Node.js and npm if you haven't already. You can download them from [nodejs.org](https://nodejs.org/).
-Verify your Node.js installation:
+首先，让我们安装Node.js和npm，如果您还没有安装它们。您可以从[nodejs.org](https://nodejs.org/)下载它们。
+验证您的Node.js安装：
 ```bash
 node --version
 npm --version
 ```
-For this tutorial, you'll need Node.js version 16 or higher.
+对于本教程，您需要Node.js版本16或更高。
 
-Now, let's create and set up our project:
+现在，让我们创建和设置我们的项目：
 
 <CodeGroup>
 ```bash MacOS/Linux
-# Create a new directory for our project
+# 创建一个新的目录用于我们的项目
 mkdir weather
 cd weather
 
-# Initialize a new npm project
+# 初始化一个新的npm项目
 npm init -y
 
-# Install dependencies
+# 安装依赖项
 npm install @modelcontextprotocol/sdk zod
 npm install -D @types/node typescript
 
-# Create our files
+# 创建我们的文件
 mkdir src
 touch src/index.ts
 ```
 
 ```powershell Windows
-# Create a new directory for our project
+# 创建一个新的目录用于我们的项目
 md weather
 cd weather
 
-# Initialize a new npm project
+# 初始化一个新的npm项目
 npm init -y
 
-# Install dependencies
+# 安装依赖项
 npm install @modelcontextprotocol/sdk zod
 npm install -D @types/node typescript
 
-# Create our files
+# 创建我们的文件
 md src
 new-item src\index.ts
 ```
 </CodeGroup>
 
-Update your package.json to add type: "module" and a build script:
+更新您的`package.json`文件，以添加`type`：`module`和一个构建脚本：
 
 ```json package.json
 {
@@ -394,7 +381,7 @@ Update your package.json to add type: "module" and a build script:
 }
 ```
 
-Create a `tsconfig.json` in the root of your project:
+创建一个`tsconfig.json`文件，在项目根目录下：
 
 ```json tsconfig.json
 {
@@ -414,13 +401,13 @@ Create a `tsconfig.json` in the root of your project:
 }
 ```
 
-Now let's dive into building your server.
+现在让我们开始构建我们的服务。
 
-## Building your server
+## 构建我们的服务
 
-### Importing packages and setting up the instance
+### 导入包和设置实例
 
-Add these to the top of your `src/index.ts`:
+在`src/index.ts`文件顶部添加以下代码：
 ```typescript
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -429,19 +416,19 @@ import { z } from "zod";
 const NWS_API_BASE = "https://api.weather.gov";
 const USER_AGENT = "weather-app/1.0";
 
-// Create server instance
+// 创建服务实例
 const server = new McpServer({
   name: "weather",
   version: "1.0.0",
 });
 ```
 
-### Helper functions
+### 辅助函数
 
-Next, let's add our helper functions for querying and formatting the data from the National Weather Service API:
+接下来，让我们添加用于从国家气象局API查询和格式化数据的辅助函数：
 
 ```typescript
-// Helper function for making NWS API requests
+// 辅助函数用于向NWS API发送请求
 async function makeNWSRequest<T>(url: string): Promise<T | null> {
   const headers = {
     "User-Agent": USER_AGENT,
@@ -451,11 +438,11 @@ async function makeNWSRequest<T>(url: string): Promise<T | null> {
   try {
     const response = await fetch(url, { headers });
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP错误！状态：${response.status}`);
     }
     return (await response.json()) as T;
   } catch (error) {
-    console.error("Error making NWS request:", error);
+    console.error("错误发送NWS请求：", error);
     return null;
   }
 }
@@ -470,15 +457,15 @@ interface AlertFeature {
   };
 }
 
-// Format alert data
+// 格式化警报数据
 function formatAlert(feature: AlertFeature): string {
   const props = feature.properties;
   return [
-    `Event: ${props.event || "Unknown"}`,
-    `Area: ${props.areaDesc || "Unknown"}`,
-    `Severity: ${props.severity || "Unknown"}`,
-    `Status: ${props.status || "Unknown"}`,
-    `Headline: ${props.headline || "No headline"}`,
+    `事件：${props.event || "未知"}`,
+    `区域：${props.areaDesc || "未知"}`,
+    `严重程度：${props.severity || "未知"}`,
+    `状态：${props.status || "未知"}`,
+    `标题：${props.headline || "无标题"}`,
     "---",
   ].join("\n");
 }
@@ -509,17 +496,17 @@ interface ForecastResponse {
 }
 ```
 
-### Implementing tool execution
+### 实现工具执行
 
-The tool execution handler is responsible for actually executing the logic of each tool. Let's add it:
+工具执行处理器负责实际执行每个工具的逻辑。让我们添加它：
 
 ```typescript
-// Register weather tools
+// 注册天气工具
 server.tool(
   "get-alerts",
-  "Get weather alerts for a state",
+  "获取某个州的天气警报",
   {
-    state: z.string().length(2).describe("Two-letter state code (e.g. CA, NY)"),
+    state: z.string().length(2).describe("两个字母的美国州代码（例如CA，NY）"),
   },
   async ({ state }) => {
     const stateCode = state.toUpperCase();
@@ -531,7 +518,7 @@ server.tool(
         content: [
           {
             type: "text",
-            text: "Failed to retrieve alerts data",
+            text: "无法获取警报数据",
           },
         ],
       };
@@ -543,14 +530,14 @@ server.tool(
         content: [
           {
             type: "text",
-            text: `No active alerts for ${stateCode}`,
+            text: `该州没有活跃的警报`,
           },
         ],
       };
     }
 
     const formattedAlerts = features.map(formatAlert);
-    const alertsText = `Active alerts for ${stateCode}:\n\n${formattedAlerts.join("\n")}`;
+    const alertsText = `该州的活跃警报：\n\n${formattedAlerts.join("\n")}`;
 
     return {
       content: [
@@ -565,13 +552,13 @@ server.tool(
 
 server.tool(
   "get-forecast",
-  "Get weather forecast for a location",
+  "获取某个位置的天气预报",
   {
-    latitude: z.number().min(-90).max(90).describe("Latitude of the location"),
-    longitude: z.number().min(-180).max(180).describe("Longitude of the location"),
+    latitude: z.number().min(-90).max(90).describe("位置的纬度"),
+    longitude: z.number().min(-180).max(180).describe("位置的经度"),
   },
   async ({ latitude, longitude }) => {
-    // Get grid point data
+    // 获取预报网格端点
     const pointsUrl = `${NWS_API_BASE}/points/${latitude.toFixed(4)},${longitude.toFixed(4)}`;
     const pointsData = await makeNWSRequest<PointsResponse>(pointsUrl);
 
@@ -580,7 +567,7 @@ server.tool(
         content: [
           {
             type: "text",
-            text: `Failed to retrieve grid point data for coordinates: ${latitude}, ${longitude}. This location may not be supported by the NWS API (only US locations are supported).`,
+            text: "无法获取预报数据",
           },
         ],
       };
@@ -592,20 +579,20 @@ server.tool(
         content: [
           {
             type: "text",
-            text: "Failed to get forecast URL from grid point data",
+            text: "无法获取预报URL",
           },
         ],
       };
     }
 
-    // Get forecast data
+    // 获取预报数据
     const forecastData = await makeNWSRequest<ForecastResponse>(forecastUrl);
     if (!forecastData) {
       return {
         content: [
           {
             type: "text",
-            text: "Failed to retrieve forecast data",
+            text: "无法获取预报数据",
           },
         ],
       };
@@ -617,24 +604,24 @@ server.tool(
         content: [
           {
             type: "text",
-            text: "No forecast periods available",
+            text: "没有预报周期",
           },
         ],
       };
     }
 
-    // Format forecast periods
+    // 格式化预报周期
     const formattedForecast = periods.map((period: ForecastPeriod) =>
       [
-        `${period.name || "Unknown"}:`,
-        `Temperature: ${period.temperature || "Unknown"}°${period.temperatureUnit || "F"}`,
-        `Wind: ${period.windSpeed || "Unknown"} ${period.windDirection || ""}`,
-        `${period.shortForecast || "No forecast available"}`,
+        `${period.name || "未知"}：`,
+        `温度：${period.temperature || "未知"}°${period.temperatureUnit || "F"}`,
+        `风速：${period.windSpeed || "未知"} ${period.windDirection || ""}`,
+        `${period.shortForecast || "无预报"}`,
         "---",
       ].join("\n"),
     );
 
-    const forecastText = `Forecast for ${latitude}, ${longitude}:\n\n${formattedForecast.join("\n")}`;
+    const forecastText = `该位置的预报：\n\n${formattedForecast.join("\n")}`;
 
     return {
       content: [
@@ -648,56 +635,38 @@ server.tool(
 );
 ```
 
-### Running the server
+### 运行服务
 
-Finally, implement the main function to run the server:
+最后，让我们实现主函数来运行服务：
 
 ```typescript
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Weather MCP Server running on stdio");
+  console.error("天气MCP服务正在运行在stdio上");
 }
 
 main().catch((error) => {
-  console.error("Fatal error in main():", error);
+  console.error("主函数中的致命错误：", error);
   process.exit(1);
 });
 ```
 
-Make sure to run `npm run build` to build your server! This is a very important step in getting your server to connect.
+确保运行`npm run build`来构建您的服务！这是一个非常重要的步骤，以确保您的服务可以连接。
 
-Let's now test your server from an existing MCP host, Claude for Desktop.
+现在，让我们使用现有的MCP主机（Claude桌面版）测试我们的服务。
 
-## Testing your server with Claude for Desktop
+## 使用Claude桌面版测试我们的服务
 
 <Note>
-Claude for Desktop is not yet available on Linux. Linux users can proceed to the [Building a client](/quickstart/client) tutorial to build an MCP client that connects to the server we just built.
+Claude桌面版尚未在Linux上提供。Linux用户可以继续[构建客户端](/quickstart/client)教程，构建一个可以连接到我们刚刚构建的服务的MCP客户端。
 </Note>
 
-First, make sure you have Claude for Desktop installed. [You can install the latest version
-here.](https://claude.ai/download) If you already have Claude for Desktop, **make sure it's updated to the latest version.**
+首先，确保您已经安装了Claude桌面版。如果您已经安装了Claude桌面版，请确保它是最新版本。
 
-We'll need to configure Claude for Desktop for whichever MCP servers you want to use. To do this, open your Claude for Desktop App configuration at `~/Library/Application Support/Claude/claude_desktop_config.json` in a text editor. Make sure to create the file if it doesn't exist.
+我们需要配置Claude桌面版，以便它可以连接到我们想要使用的MCP服务。为此，请打开您的Claude桌面版应用配置文件`~/Library/Application Support/Claude/claude_desktop_config.json`，在文本编辑器中打开它。如果文件不存在，请创建它。
 
-For example, if you have [VS Code](https://code.visualstudio.com/) installed:
-
-<Tabs>
-<Tab title="MacOS/Linux">
-```bash
-code ~/Library/Application\ Support/Claude/claude_desktop_config.json
-```
-</Tab>
-<Tab title="Windows">
-```powershell
-code $env:AppData\Claude\claude_desktop_config.json
-```
-</Tab>
-</Tabs>
-
-You'll then add your servers in the `mcpServers` key. The MCP UI elements will only show up in Claude for Desktop if at least one server is properly configured.
-
-In this case, we'll add our single weather server like so:
+例如，如果您安装了[VS Code](https://code.visualstudio.com/)：
 
 <Tabs>
 <Tab title="MacOS/Linux">
@@ -734,34 +703,30 @@ In this case, we'll add our single weather server like so:
 </Tab>
 </Tabs>
 
-This tells Claude for Desktop:
-1. There's an MCP server named "weather"
-2. Launch it by running `node /ABSOLUTE/PATH/TO/PARENT/FOLDER/weather/build/index.js`
+这告诉Claude桌面版：
+1. 有一个名为“weather”的MCP服务
+2. 通过运行`node /ABSOLUTE/PATH/TO/PARENT/FOLDER/weather/build/index.js`来启动它
 
-Save the file, and restart **Claude for Desktop**.
+保存文件，并重新启动**Claude桌面版**。
 </Tab>
 </Tabs>
 
-### Test with commands
+### 测试命令
 
-Let's make sure Claude for Desktop is picking up the two tools we've exposed in our `weather` server. You can do this by looking for the hammer <img src="/images/claude-desktop-mcp-hammer-icon.svg" style={{display: 'inline', margin: 0, height: '1.3em'}} /> icon:
+让我们确保Claude桌面版正在获取我们在服务中暴露的两个工具。您可以通过查看锤子图标来做到这一点：<img src="/images/claude-desktop-mcp-hammer-icon.svg" style={{display: 'inline', margin: 0, height: '1.3em'}} />
 
-<Frame>
-  <img src="/images/visual-indicator-mcp-tools.png" />
-</Frame>
-
-After clicking on the hammer icon, you should see two tools listed:
+点击锤子图标后，您应该会看到两个工具列出：
 
 <Frame>
   <img src="/images/available-mcp-tools.png" />
 </Frame>
 
-If your server isn't being picked up by Claude for Desktop, proceed to the [Troubleshooting](#troubleshooting) section for debugging tips.
+如果您的服务没有被Claude桌面版识别，请转到[故障排除](#故障排除)部分，获取调试提示。
 
-If the hammer icon has shown up, you can now test your server by running the following commands in Claude for Desktop:
+如果锤子图标已经显示，您现在可以通过在Claude桌面版中运行以下命令来测试您的服务：
 
-- What's the weather in Sacramento?
-- What are the active weather alerts in Texas?
+- 请问萨克拉门托的天气如何？
+- 德克萨斯州有哪些活跃的天气警报？
 
 <Frame>
   <img src="/images/current-weather.png" />
@@ -771,109 +736,109 @@ If the hammer icon has shown up, you can now test your server by running the fol
 </Frame>
 
 <Note>
-Since this is the US National Weather service, the queries will only work for US locations.
+由于这是美国国家气象局的服务，因此查询只适用于美国位置。
 </Note>
 
-## What's happening under the hood
+## 什么正在发生
 
-When you ask a question:
+当您提出一个问题时：
 
-1. The client sends your question to Claude
-2. Claude analyzes the available tools and decides which one(s) to use
-3. The client executes the chosen tool(s) through the MCP server
-4. The results are sent back to Claude
-5. Claude formulates a natural language response
-6. The response is displayed to you!
+1. 客户端将您的问题发送给Claude
+2. Claude分析可用的工具，并决定使用哪一个（或多个）
+3. 客户端通过MCP服务执行选定的工具
+4. 结果被发送回Claude
+5. Claude制定一个自然语言的响应
+6. 响应被显示给您！
 
-## Troubleshooting
+## 故障排除
 
 <AccordionGroup>
-<Accordion title="Claude for Desktop Integration Issues">
-**Getting logs from Claude for Desktop**
+<Accordion title="Claude桌面版集成问题">
+**从Claude桌面版获取日志**
 
-Claude.app logging related to MCP is written to log files in `~/Library/Logs/Claude`:
+Claude.app与MCP相关的日志记录在`~/Library/Logs/Claude`中：
 
-- `mcp.log` will contain general logging about MCP connections and connection failures.
-- Files named `mcp-server-SERVERNAME.log` will contain error (stderr) logging from the named server.
+- `mcp.log`将包含MCP连接和连接失败的通用日志记录。
+- 名为`mcp-server-SERVERNAME.log`的文件将包含命名服务器的错误（stderr）日志记录。
 
-You can run the following command to list recent logs and follow along with any new ones:
+您可以运行以下命令来列出最近的日志并跟踪新的日志：
 ```bash
-# Check Claude's logs for errors
+# 检查Claude的日志以获取错误
 tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
 ```
 
-**Server not showing up in Claude**
+**服务没有显示在Claude中**
 
-1. Check your `claude_desktop_config.json` file syntax
-2. Make sure the path to your project is absolute and not relative
-3. Restart Claude for Desktop completely
+1. 检查您的`claude_desktop_config.json`文件的语法
+2. 确保项目路径是绝对的，而不是相对的
+3. 完全重新启动Claude桌面版
 
-**Tool calls failing silently**
+**工具调用失败**
 
-If Claude attempts to use the tools but they fail:
+如果Claude尝试使用工具，但失败：
 
-1. Check Claude's logs for errors
-2. Verify your server builds and runs without errors
-3. Try restarting Claude for Desktop
+1. 检查Claude的日志以获取错误
+2. 验证您的服务构建和运行没有错误
+3. 尝试重新启动Claude桌面版
 
-**None of this is working. What do I do?**
+**没有任何东西起作用。我该怎么办？**
 
-Please refer to our [debugging guide](/docs/tools/debugging) for better debugging tools and more detailed guidance.
+请参阅我们的[调试指南](/docs/tools/debugging)，获取更好的调试工具和更详细的指导。
 </Accordion>
-<Accordion title="Weather API Issues">
-**Error: Failed to retrieve grid point data**
+<Accordion title="天气API问题">
+**错误：无法获取网格点数据**
 
-This usually means either:
-1. The coordinates are outside the US
-2. The NWS API is having issues
-3. You're being rate limited
+这通常意味着：
+1. 坐标在美国以外
+2. NWS API存在问题
+3. 您被限制了速率
 
-Fix:
+解决方法：
 
-- Verify you're using US coordinates
-- Add a small delay between requests
-- Check the NWS API status page
+- 验证您使用的是美国坐标
+- 在请求之间添加一个小的延迟
+- 检查NWS API的状态页面
 
-**Error: No active alerts for [STATE]**
+**错误：没有该州的活跃警报**
 
-This isn't an error - it just means there are no current weather alerts for that state. Try a different state or check during severe weather.
+这不是一个错误 - 只是意味着该州没有当前的天气警报。尝试不同的州或在严重天气期间检查。
 </Accordion>
 
 </AccordionGroup>
 
 <Note>
-For more advanced troubleshooting, check out our guide on [Debugging MCP](/docs/tools/debugging)
+有关更高级的故障排除，请参阅我们的[MCP调试指南](/docs/tools/debugging)
 </Note>
 
-## Next steps
+## 下一步
 
 <CardGroup cols={2}>
   <Card
-    title="Building a client"
+    title="构建客户端"
     icon="outlet"
     href="/quickstart/client"
   >
-    Learn how to build your own MCP client that can connect to your server
+    学习如何构建自己的MCP客户端，以连接到您的服务
   </Card>
   <Card
-    title="Example servers"
+    title="示例服务"
     icon="grid"
     href="/examples"
   >
-    Check out our gallery of official MCP servers and implementations
+    查看我们的官方MCP服务和实现的画廊
   </Card>
   <Card
-    title="Debugging Guide"
+    title="调试指南"
     icon="bug"
     href="/docs/tools/debugging"
   >
-    Learn how to effectively debug MCP servers and integrations
+    学习如何有效地调试MCP服务和集成
   </Card>
   <Card
-    title="Building MCP with LLMs"
+    title="使用LLM构建MCP"
     icon="comments"
     href="/building-mcp-with-llms"
   >
-    Learn how to use LLMs like Claude to speed up your MCP development
+    学习如何使用LLM（如Claude）来加速您的MCP开发
   </Card>
 </CardGroup>
