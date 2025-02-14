@@ -1,85 +1,85 @@
 ---
-title: 'Markdown Syntax'
-description: 'Text, title, and styling in standard markdown'
+title: 'Markdown语法'
+description: '标准markdown中的文本、标题和样式'
 icon: 'text-size'
 ---
 
-## Titles
+## 标题
 
-Best used for section headers.
+最适合用作章节标题。
 
 ```md
-## Titles
+## 标题
 ```
 
-### Subtitles
+### 子标题
 
-Best use to subsection headers.
+最适合用作小节标题。
 
 ```md
-### Subtitles
+### 子标题
 ```
 
 <Tip>
 
-Each **title** and **subtitle** creates an anchor and also shows up on the table of contents on the right.
+每个**标题**和**子标题**都会创建一个锚点，并且会显示在右侧的目录中。
 
 </Tip>
 
-## Text Formatting
+## 文本格式
 
-We support most markdown formatting. Simply add `**`, `_`, or `~` around text to format it.
+我们支持大多数markdown格式。只需在文本周围添加`**`、`_`或`~`即可设置格式。
 
-| Style         | How to write it   | Result          |
+| 样式 | 如何编写 | 结果 |
 | ------------- | ----------------- | --------------- |
-| Bold          | `**bold**`        | **bold**        |
-| Italic        | `_italic_`        | _italic_        |
-| Strikethrough | `~strikethrough~` | ~strikethrough~ |
+| 粗体 | `**粗体**` | **粗体** |
+| 斜体 | `_斜体_` | _斜体_ |
+| 删除线 | `~删除线~` | ~删除线~ |
 
-You can combine these. For example, write `**_bold and italic_**` to get **_bold and italic_** text.
+您可以组合使用这些格式。例如，写`**_粗体和斜体_**`可以得到**_粗体和斜体_**文本。
 
-You need to use HTML to write superscript and subscript text. That is, add `<sup>` or `<sub>` around your text.
+您需要使用HTML来编写上标和下标文本。也就是说，在文本周围添加`<sup>`或`<sub>`。
 
-| Text Size   | How to write it          | Result                 |
+| 文本大小 | 如何编写 | 结果 |
 | ----------- | ------------------------ | ---------------------- |
-| Superscript | `<sup>superscript</sup>` | <sup>superscript</sup> |
-| Subscript   | `<sub>subscript</sub>`   | <sub>subscript</sub>   |
+| 上标 | `<sup>上标</sup>` | <sup>上标</sup> |
+| 下标 | `<sub>下标</sub>` | <sub>下标</sub> |
 
-## Linking to Pages
+## 链接到页面
 
-You can add a link by wrapping text in `[]()`. You would write `[link to google](https://google.com)` to [link to google](https://google.com).
+您可以通过将文本包装在`[]()`中来添加链接。例如，写`[链接到谷歌](https://google.com)`会显示为[链接到谷歌](https://google.com)。
 
-Links to pages in your docs need to be root-relative. Basically, you should include the entire folder path. For example, `[link to text](/writing-content/text)` links to the page "Text" in our components section.
+链接到文档中的页面需要使用根相对路径。基本上，您应该包含完整的文件夹路径。例如，`[链接到文本](/writing-content/text)`链接到我们组件部分中的"文本"页面。
 
-Relative links like `[link to text](../text)` will open slower because we cannot optimize them as easily.
+像`[链接到文本](../text)`这样的相对链接打开速度会较慢，因为我们无法轻易地优化它们。
 
-## Blockquotes
+## 引用块
 
-### Singleline
+### 单行引用
 
-To create a blockquote, add a `>` in front of a paragraph.
+要创建引用块，在段落前面添加一个`>`。
 
-> Dorothy followed her through many of the beautiful rooms in her castle.
+> 多萝西跟随她穿过城堡中许多美丽的房间。
 
 ```md
-> Dorothy followed her through many of the beautiful rooms in her castle.
+> 多萝西跟随她穿过城堡中许多美丽的房间。
 ```
 
-### Multiline
+### 多行引用
 
-> Dorothy followed her through many of the beautiful rooms in her castle.
+> 多萝西跟随她穿过城堡中许多美丽的房间。
 >
-> The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.
+> 女巫命令她清洗锅碗瓢盆，打扫地板，并不断往火里添柴。
 
 ```md
-> Dorothy followed her through many of the beautiful rooms in her castle.
+> 多萝西跟随她穿过城堡中许多美丽的房间。
 >
-> The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.
+> 女巫命令她清洗锅碗瓢盆，打扫地板，并不断往火里添柴。
 ```
 
 ### LaTeX
 
-Mintlify supports [LaTeX](https://www.latex-project.org) through the Latex component.
+Mintlify通过Latex组件支持[LaTeX](https://www.latex-project.org)。
 
 <Latex>8 x (vk x H1 - H2) = (0,1)</Latex>
 

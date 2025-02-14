@@ -1,73 +1,73 @@
 ---
-title: "Building MCP with LLMs"
-description: "Speed up your MCP development using LLMs such as Claude!"
+title: "使用LLMs构建MCP"
+description: "使用Claude等LLMs加速您的MCP开发！"
 ---
 
-This guide will help you use LLMs to help you build custom Model Context Protocol (MCP) servers and clients. We'll be focusing on Claude for this tutorial, but you can do this with any frontier LLM.
+本指南将帮助您使用LLMs来构建自定义的模型上下文协议（MCP）服务器和客户端。本教程将以Claude为例，但您可以使用任何前沿的LLM来完成这项工作。
 
-## Preparing the documentation
+## 准备文档
 
-Before starting, gather the necessary documentation to help Claude understand MCP:
+在开始之前，收集必要的文档来帮助Claude理解MCP：
 
-1. Visit https://modelcontextprotocol.io/llms-full.txt and copy the full documentation text
-2. Navigate to either the [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) or [Python SDK repository](https://github.com/modelcontextprotocol/python-sdk)
-3. Copy the README files and other relevant documentation
-4. Paste these documents into your conversation with Claude
+1. 访问 https://modelcontextprotocol.io/llms-full.txt 并复制完整的文档文本
+2. 访问[MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)或[Python SDK仓库](https://github.com/modelcontextprotocol/python-sdk)
+3. 复制README文件和其他相关文档
+4. 将这些文档粘贴到您与Claude的对话中
 
-## Describing your server
+## 描述您的服务器
 
-Once you've provided the documentation, clearly describe to Claude what kind of server you want to build. Be specific about:
+在提供了文档之后，向Claude清晰地描述您想要构建的服务器类型。具体说明：
 
-- What resources your server will expose
-- What tools it will provide
-- Any prompts it should offer
-- What external systems it needs to interact with
+- 您的服务器将暴露哪些资源
+- 它将提供哪些工具
+- 它应该提供哪些提示
+- 它需要与哪些外部系统交互
 
-For example:
+例如：
 ```
-Build an MCP server that:
-- Connects to my company's PostgreSQL database
-- Exposes table schemas as resources
-- Provides tools for running read-only SQL queries
-- Includes prompts for common data analysis tasks
+构建一个MCP服务器，它：
+- 连接到我公司的PostgreSQL数据库
+- 将表结构暴露为资源
+- 提供运行只读SQL查询的工具
+- 包含常见数据分析任务的提示
 ```
 
-## Working with Claude
+## 与Claude协作
 
-When working with Claude on MCP servers:
+在与Claude一起开发MCP服务器时：
 
-1. Start with the core functionality first, then iterate to add more features
-2. Ask Claude to explain any parts of the code you don't understand
-3. Request modifications or improvements as needed
-4. Have Claude help you test the server and handle edge cases
+1. 首先从核心功能开始，然后迭代添加更多功能
+2. 要求Claude解释您不理解的任何代码部分
+3. 根据需要请求修改或改进
+4. 让Claude帮助您测试服务器并处理边缘情况
 
-Claude can help implement all the key MCP features:
+Claude可以帮助实现所有关键的MCP功能：
 
-- Resource management and exposure
-- Tool definitions and implementations
-- Prompt templates and handlers
-- Error handling and logging
-- Connection and transport setup
+- 资源管理和暴露
+- 工具定义和实现
+- 提示模板和处理程序
+- 错误处理和日志记录
+- 连接和传输设置
 
-## Best practices
+## 最佳实践
 
-When building MCP servers with Claude:
+使用Claude构建MCP服务器时：
 
-- Break down complex servers into smaller pieces
-- Test each component thoroughly before moving on
-- Keep security in mind - validate inputs and limit access appropriately
-- Document your code well for future maintenance
-- Follow MCP protocol specifications carefully
+- 将复杂的服务器分解成更小的部分
+- 在继续之前彻底测试每个组件
+- 注意安全性 - 适当验证输入并限制访问
+- 为将来的维护编写良好的代码文档
+- 仔细遵循MCP协议规范
 
-## Next steps
+## 后续步骤
 
-After Claude helps you build your server:
+在Claude帮助您构建服务器之后：
 
-1. Review the generated code carefully
-2. Test the server with the MCP Inspector tool
-3. Connect it to Claude.app or other MCP clients
-4. Iterate based on real usage and feedback
+1. 仔细检查生成的代码
+2. 使用MCP检查器工具测试服务器
+3. 将其连接到Claude.app或其他MCP客户端
+4. 根据实际使用情况和反馈进行迭代
 
-Remember that Claude can help you modify and improve your server as requirements change over time.
+请记住，随着需求的变化，Claude可以帮助您修改和改进您的服务器。
 
-Need more guidance? Just ask Claude specific questions about implementing MCP features or troubleshooting issues that arise.
+需要更多指导？只需向Claude询问有关实现MCP功能或解决出现的问题的具体问题。
