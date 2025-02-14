@@ -1,54 +1,61 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "theme": "willow",
+  "name": "Model Context Protocol",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#09090b",
+    "light": "#FAFAFA",
+    "dark": "#09090b"
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "tabs": [
+    "anchors": [
       {
-        "tab": "Guides",
+        "anchor": "Documentation",
+        "icon": "book-open",
         "groups": [
           {
             "group": "Get Started",
             "pages": [
               "introduction",
-              "quickstart",
-              "development"
+              {
+                "group": "Quickstart",
+                "pages": [
+                  "quickstart/server",
+                  "quickstart/client",
+                  "quickstart/user"
+                ]
+              },
+              "examples",
+              "clients"
             ]
           },
           {
-            "group": "Essentials",
+            "group": "Tutorials",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "API Documentation",
-            "pages": [
-              "api-reference/introduction"
+              "tutorials/building-mcp-with-llms",
+              "docs/tools/debugging",
+              "docs/tools/inspector"
             ]
           },
           {
-            "group": "Endpoint Examples",
+            "group": "Concepts",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete"
+              "docs/concepts/architecture",
+              "docs/concepts/resources",
+              "docs/concepts/prompts",
+              "docs/concepts/tools",
+              "docs/concepts/sampling",
+              "docs/concepts/roots",
+              "docs/concepts/transports"
+            ]
+          },
+          {
+            "group": "Development",
+            "pages": [
+              "development/updates",
+              "development/roadmap",
+              "development/contributing"
             ]
           }
         ]
@@ -57,19 +64,24 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "Python SDK",
+          "href": "https://github.com/modelcontextprotocol/python-sdk",
+          "icon": "python"
         },
         {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
+          "anchor": "TypeScript SDK",
+          "href": "https://github.com/modelcontextprotocol/typescript-sdk",
+          "icon": "square-js"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Kotlin SDK",
+          "href": "https://github.com/modelcontextprotocol/kotlin-sdk",
+          "icon": "square-k"
+        },
+        {
+          "anchor": "Specification",
+          "href": "https://spec.modelcontextprotocol.io",
+          "icon": "book"
         }
       ]
     }
@@ -79,23 +91,32 @@
     "dark": "/logo/dark.svg"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
+    "links": [],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "GitHub",
+      "href": "https://github.com/modelcontextprotocol"
     }
+  },
+  "seo": {
+    "metatags": {
+      "og:image": "https://raw.githubusercontent.com/modelcontextprotocol/docs/2eb6171ddbfeefde349dc3b8d5e2b87414c26250/images/og-image.png"
+    },
+    "indexing": "navigable"
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/modelcontextprotocol"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/tutorials/building-a-client",
+      "destination": "/quickstart/client"
+    },
+    {
+      "source": "/quickstart",
+      "destination": "/quickstart/server"
+    }
+  ]
 }
