@@ -9,10 +9,9 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "anchors": [
+    "tabs": [
       {
-        "anchor": "Documentation",
-        "icon": "book-open",
+        "tab": "文档",
         "groups": [
           {
             "group": "开始",
@@ -91,7 +90,12 @@
     "dark": "/logo/dark.svg"
   },
   "navbar": {
-    "links": [],
+    "links": [
+      {
+        "label": "EN",
+        "href": "https://modelcontextprotocol.io/"
+      }
+    ],
     "primary": {
       "type": "button",
       "label": "GitHub",
