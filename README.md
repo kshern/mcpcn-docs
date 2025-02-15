@@ -10,6 +10,6 @@
 
 ---
 
-> 注：这是模型上下文协议（MCP）文档的中文翻译版本。原始英文版本请访问：[modelcontextprotocol.io](https://modelcontextprotocol.io)。
+> 注：这是模型上下文协议（MCP）文档的中文翻译版本。原始英文版本请访问：[modelcontextprotocol.io](https://modelcontextprotocol.io)。英文版原始项目：[modelcontextprotocol](https://github.com/modelcontextprotocol)
 > 
 > 最后更新时间：2025年2月15日
