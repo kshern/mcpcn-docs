@@ -1,7 +1,8 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "willow",
-  "name": "模型上下文协议",
+  "name": "Model Context Protocol",
+  "description": "Model Context Protocol,MCP,模型上下文协议,Model Context Protocol中文文档,MCP中文文档",
   "colors": {
     "primary": "#09090b",
     "light": "#FAFAFA",
