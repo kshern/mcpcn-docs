@@ -118,7 +118,7 @@
     "primary": {
       "type": "button",
       "label": "GitHub",
-      "href": "https://github.com/modelcontextprotocol"
+      "href": "hhttps://github.com/mcp-cn/docs"
     }
   },
   "seo": {
@@ -129,7 +129,7 @@
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/modelcontextprotocol"
+      "github": "hhttps://github.com/mcp-cn/docs"
     }
   },
   "redirects": [
