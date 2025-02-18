@@ -1,8 +1,8 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "willow",
-  "name": "Model Context Protocol",
-  "description": "Model Context Protocol,MCP,模型上下文协议,Model Context Protocol中文文档,MCP中文文档",
+  "name": "MCP中文文档 | Model Context Protocol",
+  "description": "MCP（Model Context Protocol）是一个开源的模型上下文协议，用于标准化AI模型与应用程序之间的交互。提供完整的中文文档、教程和SDK支持。",
   "colors": {
     "primary": "#09090b",
     "light": "#FAFAFA",
@@ -124,7 +124,12 @@
   },
   "seo": {
     "metatags": {
-      "og:image": "https://raw.githubusercontent.com/modelcontextprotocol/docs/2eb6171ddbfeefde349dc3b8d5e2b87414c26250/images/og-image.png"
+      "og:title": "Model Context Protocol (MCP) - 模型上下文协议中文文档",
+      "og:description": "Model Context Protocol (MCP) 是一个开源的模型上下文协议，旨在标准化AI模型与应用程序之间的交互。",
+      "og:image": "https://raw.githubusercontent.com/modelcontextprotocol/docs/2eb6171ddbfeefde349dc3b8d5e2b87414c26250/images/og-image.png",
+      "twitter:title": "Model Context Protocol (MCP) - 模型上下文协议中文文档",
+      "twitter:description": "开源的模型上下文协议，提供标准化的AI模型接口。",
+      "twitter:image": "https://raw.githubusercontent.com/modelcontextprotocol/docs/2eb6171ddbfeefde349dc3b8d5e2b87414c26250/images/og-image.png"
     },
     "indexing": "navigable"
   },
