@@ -125,10 +125,10 @@
   "seo": {
     "metatags": {
       "og:title": "Model Context Protocol (MCP) - 模型上下文协议中文文档",
-      "og:description": "Model Context Protocol (MCP) 是一个开源的模型上下文协议，旨在标准化AI模型与应用程序之间的交互。",
+      "og:description": "MCP（Model Context Protocol）是一个开源的模型上下文协议，用于标准化AI模型与应用程序之间的交互。提供完整的中文文档、教程和SDK支持。",
       "og:image": "https://raw.githubusercontent.com/modelcontextprotocol/docs/2eb6171ddbfeefde349dc3b8d5e2b87414c26250/images/og-image.png",
       "twitter:title": "Model Context Protocol (MCP) - 模型上下文协议中文文档",
-      "twitter:description": "开源的模型上下文协议，提供标准化的AI模型接口。",
+      "twitter:description": "MCP（Model Context Protocol）是一个开源的模型上下文协议，用于标准化AI模型与应用程序之间的交互。提供完整的中文文档、教程和SDK支持。",
       "twitter:image": "https://raw.githubusercontent.com/modelcontextprotocol/docs/2eb6171ddbfeefde349dc3b8d5e2b87414c26250/images/og-image.png",
       "google-site-verification": "7E7SNz3j6AVdceW95JRGhm31glCxwemBgEkcBSNMrsM"
     },
